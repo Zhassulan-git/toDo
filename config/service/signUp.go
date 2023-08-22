@@ -10,6 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+//hello budy
 func SignUpUser(w http.ResponseWriter, r *http.Request) {
 
 	var person models.User
