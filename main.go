@@ -11,12 +11,7 @@ import (
 func main() {
 	r := mux.NewRouter()
 
-	//task := r.PathPrefix("/todos").Subrouter()
 	routes.RegisterTasks(r)
-
-	//user := r.PathPrefix("/users").Subrouter()
-
-	//user.Use(controllers.AuthMiddleware)
 	routes.UsersRegister(r)
 
 	http.Handle("/", r)
