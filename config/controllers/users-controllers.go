@@ -8,45 +8,44 @@ import (
 	"os"
 	"time"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/user/toDo/config/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
 var SecretKey = []byte(os.Getenv("SECRET_KEY"))
 
-func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+// func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
 
-		c, err := r.Cookie("token")
-		if err != nil {
-			if err == http.ErrNoCookie {
-				// If the cookie is not set, return an unauthorized status
-				w.WriteHeader(http.StatusUnauthorized)
-				fmt.Fprintf(w, "Not Authorized")
-				return
-			}
-			// For any other type of error, return a bad request status
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
+// 		c, err := r.Cookie("token")
+// 		if err != nil {
+// 			if err == http.ErrNoCookie {
+// 				// If the cookie is not set, return an unauthorized status
+// 				w.WriteHeader(http.StatusUnauthorized)
+// 				fmt.Fprintf(w, "Not Authorized")
+// 				return
+// 			}
+// 			// For any other type of error, return a bad request status
+// 			w.WriteHeader(http.StatusBadRequest)
+// 			return
+// 		}
 
-		tkn, err := models.CheckAuth(c)
-		if err != nil {
-			if err == jwt.ErrSignatureInvalid {
-				w.WriteHeader(http.StatusUnauthorized)
-				return
-			}
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-		if !tkn.Valid {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-		next(w, r)
-	}
-}
+// 		tkn, err := models.CheckAuth(c)
+// 		if err != nil {
+// 			if err == jwt.ErrSignatureInvalid {
+// 				w.WriteHeader(http.StatusUnauthorized)
+// 				return
+// 			}
+// 			w.WriteHeader(http.StatusBadRequest)
+// 			return
+// 		}
+// 		if !tkn.Valid {
+// 			w.WriteHeader(http.StatusUnauthorized)
+// 			return
+// 		}
+// 		next(w, r)
+// 	}
+// }
 
 func LogInUser(w http.ResponseWriter, r *http.Request) {
 
@@ -54,6 +53,7 @@ func LogInUser(w http.ResponseWriter, r *http.Request) {
 
 	// get email and pass
 	var person, user models.UserLogIn
+	fmt.Println(person)
 
 	json.NewDecoder(r.Body).Decode(&user)
 	email := user.Email
@@ -65,6 +65,7 @@ func LogInUser(w http.ResponseWriter, r *http.Request) {
 
 	//compare sent request and saved pass hash
 	error := bcrypt.CompareHashAndPassword([]byte(person.Password), []byte(password))
+
 	if error != nil {
 		log.Fatal(err, "Invalid password")
 	} else {

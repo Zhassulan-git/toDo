@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	_ "github.com/lib/pq" //for unknown driver "postgres"
 )
 
 //connect with database
