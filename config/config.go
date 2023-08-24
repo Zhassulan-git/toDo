@@ -2,9 +2,7 @@ package config
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
-	"os"
 
 	_ "github.com/lib/pq" //for unknown driver "postgres"
 )
@@ -12,7 +10,7 @@ import (
 //connect with database
 
 func SetupDb() *sql.DB {
-	connStr := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
+	connStr := "user=postgres password=grespost dbname=to_do sslmode=disable"
 
 	db, err := sql.Open("postgres", connStr)
 
