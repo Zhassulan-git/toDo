@@ -11,6 +11,7 @@ import (
 )
 
 func GetTodos(w http.ResponseWriter, r *http.Request) {
+
 	var tasks []models.Todo
 	rows, err := config.SetupDb().Query("SELECT * FROM todos;")
 	if err != nil {
@@ -33,7 +34,10 @@ func GetTodos(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	_, err = w.Write(res)
+	if err != nil {
+		http.Error(w, "Error writing response", http.StatusInternalServerError)
+	}
 }
 
 func GetById(w http.ResponseWriter, r *http.Request) {

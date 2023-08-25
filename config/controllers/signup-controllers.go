@@ -1,4 +1,4 @@
-package service
+package controllers
 
 import (
 	"encoding/json"
@@ -7,7 +7,6 @@ import (
 
 	"github.com/user/toDo/config"
 	"github.com/user/toDo/config/models"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func SignUpUser(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +29,7 @@ func SignUpUser(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err, "unmarshal fatal")
 	}
 
-	bytes := generatePasswordHash(datafield.Password)
+	bytes := models.GeneratePasswordHash(datafield.Password)
 
 	_, err = db.Exec(`INSERT INTO 
 			users (personid, firstname, lastname, email, password) 
@@ -42,12 +41,4 @@ func SignUpUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(person)
-}
-
-func generatePasswordHash(pass string) []byte {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(pass), 14)
-	if err != nil {
-		log.Fatal(err, "Failed to hash password")
-	}
-	return bytes
 }
